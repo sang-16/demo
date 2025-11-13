@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.demo.model.domain.Article;
 import com.example.demo.model.domain.Board;
@@ -26,15 +28,28 @@ public List<Board> findAll() { // 게시판 전체 목록 조회
 return blogRepository2.findAll();
 }
 
-public Article save(AddArticleRequest request){
+//public Article save(AddArticleRequest request){
 // DTO가 없는 경우 이곳에 직접 구현 가능
 // public ResponseEntity<Article> addArticle(@RequestParam String title, @RequestParam String content) {
 // Article article = Article.builder()
 // .title(title)
 // .content(content)
 // .build();
-return blogRepository.save(request.toEntity());
+//return blogRepository.save(request.toEntity());
+//}
+
+public Board save(AddArticleRequest request){
+// DTO가 없는 경우 이곳에 직접 구현 가능
+return blogRepository2.save(request.toEntity());
 }
+
+public Page<Board> findAll(Pageable pageable) {
+return blogRepository2.findAll(pageable);
+}
+
+public Page<Board> searchByKeyword(String keyword, Pageable pageable) {
+return blogRepository2.findByTitleContainingIgnoreCase(keyword, pageable);
+} // LIKE 검색 제공(대소문자 무시)
 
 //public Optional<Article> findById(Long id) { // 게시판 특정 글 조회
 //return blogRepository.findById(id);
